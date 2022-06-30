@@ -19,8 +19,8 @@ int main()
     }
 
     // allocate A and B on host
-    int m = 24000;
-    int n = 24000;
+    int m = 4000;
+    int n = 4000;
 
     double* h_A = new double[m*n];
     double* h_B = new double[n];
@@ -79,16 +79,16 @@ int main()
 	cerr<<"failed to solve, info = "<<h_info<<"\n";
 	return -1;
     } else {
-	cerr<<"solved, info = "<<h_info<<"\n";
+	    cerr<<"solved, info = "<<h_info<<"\n";
     }
 
     // check results
     cudaMemcpy(h_B, d_B, n*sizeof(double), cudaMemcpyDeviceToHost);
     for(int i=1; i<n; i++) {
-	if(h_B[i] != h_B[0]) {
-	    cerr<<"wrong answer, B["<<i<<"] = "<<h_B[i]<<" , B[0] = "<<h_B[0]<<"\n";
-	    return -1;
-	}
+        if(abs(h_B[i] - h_B[0])>1E-7) {
+            cerr<<"wrong answer, B["<<i<<"] = "<<h_B[i]<<" , B[0] = "<<h_B[0]<<"\n";
+            return -1;
+        }
     }
     cerr<<"B[0] = "<<h_B[0]<<"\n";
 
